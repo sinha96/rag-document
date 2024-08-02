@@ -30,4 +30,6 @@ build-backend = "poetry.core.masonry.api"
 name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 max_length = 5461
 
+[database]
+path = "asset/data/"
 
