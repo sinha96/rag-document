@@ -7,8 +7,16 @@ from langchain_community.document_loaders import WebBaseLoader, PyPDFDirectoryLo
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 from langchain.embeddings.base import Embeddings
-
+from langchain_core.documents import Document
 load_dotenv('env')
+
+
+def split_cleanser(docs: List[Document]):
+    """
+    """
+    for doc in docs:
+        doc.page_content = doc.page_content.lower()
+    return docs
 
 def web_loader(urls: list) -> object:
     """
@@ -40,6 +48,7 @@ def pdf_loaders(path: str) -> object:
     # Split
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(docs)
+    splits = split_cleanser(docs=splits)
     return splits
 
 
@@ -82,4 +91,6 @@ class CustomEmbeddings(Embeddings):
         return self.model.encode([query])[0].tolist()
 
 if __name__ == '__main__':
-    print(pdf_loaders(path='../Documention_AWS')[:5])
+    import os
+    print(os.path.isdir('../dummy/'))
+    print(pdf_loaders(path='../dummy/'))

@@ -1,4 +1,5 @@
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores.chroma import Chroma
+# from langchain_community.s
 from Utils import CustomEmbeddings, batch_splitter
 from Utils import load_config
 from typing import List
@@ -65,9 +66,12 @@ class VectorData:
         print(f"Number of existing documents in DB: {len(existing_ids)}")
 
         new_docs = []
+        existing_docs = []
         for doc in docs:
             if doc.metadata["id"] not in existing_ids:
                 new_docs.append(doc)
+            else:
+                existing_docs.append(doc)
 
         if len(new_docs):
             print(f"👉 Adding new documents: {len(new_docs)}")
@@ -77,8 +81,30 @@ class VectorData:
                 self.db.persist()
         else:
             print("✅ No new documents to add")
+            self.__update_docs(docs=existing_docs)
 
     def __clear_database(self):
         if os.path.exists(self.config.get('path')):
             shutil.rmtree(self.config.get('path'))
+
+    def __update_docs(self, docs: List[str]):
+        """
+        """
+        
+        update_doc = []
+        for doc in docs:
+            idx = doc.metadata.get('id')
+            exist_doc = self.db.get(ids=[idx])
+
+            incoming_doc = doc.page_content
+            exist_doc = exist_doc['documents'][0]
+            if incoming_doc != exist_doc: 
+                update_doc.append(doc)
+        if update_doc:
+            print(f"👉 Updating existing documents: {len(update_doc)}")
+            for batch in batch_splitter(documents=update_doc, batch_size=self.config_model.get('max_length')):
+                update_chunk_ids = [doc.metadata["id"] for doc in batch]
+                self.db.update_documents(documents=batch, ids=update_chunk_ids)
+        else:
+            print("✅ No documents to updated.")
 
