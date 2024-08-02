@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "rag-doc"
+version = "0.1.0"
+description = "Information Extraction Bot"
+authors = ["Priyanshu Shekhar Sinha <priyanshu1996@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+transformers = "^4.43.3"
+langchain = "^0.2.12"
+langchain-community = "^0.2.10"
+beautifulsoup4 = "^4.12.3"
+chromadb = "^0.5.5"
+langchain-text-splitters = "^0.2.2"
+langsmith = "^0.1.96"
+ollama = "^0.3.1"
+openai = "^1.37.2"
+pypdf = "^4.3.1"
+python-dotenv = "^1.0.1"
+sentence-transformers = "^3.0.1"
+toml = "^0.10.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[model.embed]
+name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+max_length = 5461
+
+
