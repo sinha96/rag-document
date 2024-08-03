@@ -106,5 +106,5 @@ class VectorData:
                 update_chunk_ids = [doc.metadata["id"] for doc in batch]
                 self.db.update_documents(documents=batch, ids=update_chunk_ids)
         else:
-            print("✅ No documents to updated.")
+            print("✅ No documents to update.")
 
