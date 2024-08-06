@@ -1,6 +1,7 @@
 import bs4
 import toml
 from typing import List
+from hashlib import sha256
 from dotenv import load_dotenv
 
 from langchain_community.document_loaders import WebBaseLoader, PyPDFDirectoryLoader
@@ -17,6 +18,7 @@ def split_cleanser(docs: List[Document]):
     for doc in docs:
         doc.page_content = doc.page_content.lower()
     return docs
+
 
 def web_loader(urls: list) -> object:
     """
@@ -89,6 +91,14 @@ class CustomEmbeddings(Embeddings):
 
     def embed_query(self, query: str) -> List[float]:
         return self.model.encode([query])[0].tolist()
+
+
+def sha_generator(idx: str):
+    """
+    SHA256 Generator
+    """
+    return sha256(idx.encode('utf-8')).hexdigest()
+
 
 if __name__ == '__main__':
     import os

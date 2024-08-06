@@ -20,6 +20,8 @@ pypdf = "^4.3.1"
 python-dotenv = "^1.0.1"
 sentence-transformers = "^3.0.1"
 toml = "^0.10.2"
+fastapi = "^0.112.0"
+langchain-core = "^0.2.28"
 
 
 [build-system]
@@ -33,3 +35,6 @@ max_length = 5461
 [database]
 path = "asset/data/"
 
+
+[model.llm]
+name = 'llama3.1'

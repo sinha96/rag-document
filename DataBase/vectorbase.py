@@ -1,7 +1,6 @@
 from langchain_community.vectorstores.chroma import Chroma
-# from langchain_community.s
-from Utils import CustomEmbeddings, batch_splitter
-from Utils import load_config
+from Utils import CustomEmbeddings, batch_splitter, load_config, sha_generator
+from langchain_core.documents import Document
 from typing import List
 import shutil
 import os
@@ -17,11 +16,12 @@ class VectorData:
 
         # Loading Vector DB
         self.db = Chroma(
+            collection_name='rag-docs',
             persist_directory=self.config_vdb.get('path'),
             embedding_function=self.embedding_model
         )
     
-    def __generate_chunk_ids(self, docs: List[str]):
+    def __generate_chunk_ids(self, docs: List[Document]):
         """
         Generates id for all the chucks to keep tracking duplicate records
 
@@ -37,6 +37,7 @@ class VectorData:
 
         for doc in docs:
             source = doc.metadata.get('source')
+            source = source.split('/')[-1]
             page = doc.metadata.get('page')
             current_page_id = f"{source}:{page}"
 
@@ -45,7 +46,7 @@ class VectorData:
             else:
                 current_doc_idx = 0
             
-            doc_idx = f"{current_page_id}:{current_doc_idx}"
+            doc_idx = sha_generator(f"{current_page_id}:{current_doc_idx}")
             last_page_id = current_page_id
 
             doc.metadata['id'] = doc_idx
@@ -53,7 +54,7 @@ class VectorData:
 
         return docs
     
-    def add_data(self, docs):
+    def add_data(self, docs: List[Document]):
         """
         """
         # Generate ids for chucks
@@ -83,11 +84,11 @@ class VectorData:
             print("✅ No new documents to add")
             self.__update_docs(docs=existing_docs)
 
-    def __clear_database(self):
-        if os.path.exists(self.config.get('path')):
-            shutil.rmtree(self.config.get('path'))
+    def _clear_database(self):
+        if os.path.exists(self.config_vdb.get('path')):
+            shutil.rmtree(self.config_vdb.get('path'))
 
-    def __update_docs(self, docs: List[str]):
+    def __update_docs(self, docs: List[Document]):
         """
         """
         
@@ -108,3 +109,14 @@ class VectorData:
         else:
             print("✅ No documents to update.")
 
+    def query_data(self, q, top_k: int):
+        """
+        query data from DataBase
+
+        """
+        results = self.db.similarity_search_with_score(
+            query=q,
+            k=top_k
+        )
+
+        return results
