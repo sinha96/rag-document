@@ -1,7 +1,7 @@
 from langchain_community.vectorstores.chroma import Chroma
 from Utils import CustomEmbeddings, batch_splitter, load_config, sha_generator
 from langchain_core.documents import Document
-from typing import List
+from typing import List, Tuple
 import shutil
 import os
 
@@ -109,7 +109,7 @@ class VectorData:
         else:
             print("✅ No documents to update.")
 
-    def query_data(self, q, top_k: int):
+    def query_data(self, q, top_k: int) -> List[Tuple[Document, float]]:
         """
         query data from DataBase
 
