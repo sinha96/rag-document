@@ -9,31 +9,39 @@
 3. langchain = "^0.2.12"
 4. chromadb = "^0.5.5"
 5. ollama = "^0.3.1"
-6. fastapi = "^0.112.0"
+6. chainlit = "^1.1.402"
 
 Checkout all the depandencies [here](https://github.com/sinha96/rag-document/blob/master/pyproject.toml).
 
 ### Other Depandencies
 We are using ollama to host a LLM server in which we are using quantized <b><i>LLaMa3.1:8b</b></i> model from Meta. In terms of encoder we are using <b><i>paraphrase-multilingual-MiniLM-L12-v2</b></i>.
 
+## API setup
+At the project level create a env file which should have below lines:
+
+```
+LANGCHAIN_API_KEY=<your api key>
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
+LANGCHAIN_PROJECT=<your_project_name>
+```
+
+This will help you to keep track of Chain-of-Thought of your RAG agent. Illustrated below:
+
+![Alt_text](./asset/langsmith.png)
+
 ## How to get started
 1. Download LLaMa3.1 using below command:
 ```
-
 ollama pull llama3.1
-
 ```
 2. Start Ollama server.
 ```
-
 ollama serve
-
 ```
 3. start the RAG server in reload mode.
 ```
-
 uvicorn app:app --reload
-
 ```
 
 ## Using the application
@@ -42,7 +50,6 @@ Send an api request to store you documents(pdf) into vector database.
 
 ```
 curl -d @path/to/data.pdf http://localhost:8000
-
 ```
 
 Also, we can use FastAPI UI/Postman to send document
@@ -90,8 +97,17 @@ curl http://localhost:11434/api/chat -d '{
 }'
 ```
 
+### Using UI
+To start the RAG Application UI use the below command:
+```
+chainlit run <path-to-your-app.py>  -w
+```
+-w is used to reload the app whenever app detects change in the code.
+
+
 ## Future Updates
 - [X] Chat UI
+- [ ] Chat history persistence
 - [ ] Compatibility for docx, txt, web url
 - [ ] Multi-model agent which redirect requests based on user query
 - [ ] Compatibility for images

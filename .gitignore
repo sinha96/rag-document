@@ -1,7 +1,7 @@
 Embedder/__pycache__/
 *.pyc
 Embedder/__pycache__/embed.cpython-310.pyc
-asset/
+asset/data/
 .asset/data/chroma.sqlite3
 Embedder/__pycache__/embed.cpython-310.pyc
 Utils/config.py
