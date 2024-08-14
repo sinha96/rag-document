@@ -27,7 +27,8 @@ def web_loader(urls: list) -> object:
         web_paths=urls,
         bs_kwargs=dict(
             parse_only=bs4.SoupStrainer(
-                class_=("post-content", "post-title", "post-header")
+                # class_=['mw-body-content']
+                'p'
                 )
             ),
     )
@@ -101,6 +102,7 @@ def sha_generator(idx: str):
 
 
 if __name__ == '__main__':
-    import os
-    print(os.path.isdir('../dummy/'))
-    print(pdf_loaders(path='../dummy/'))
+    # import os
+    # print(os.path.isdir('../dummy/'))
+    # print(pdf_loaders(path='../dummy/'))
+    print(web_loader(urls=['https://en.wikipedia.org/wiki/2024_Summer_Olympics']))

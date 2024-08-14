@@ -13,7 +13,7 @@ app = FastAPI()
 
 @app.post("/uploadfiles/")
 async def upload_files(files: List[UploadFile] = File(...)):
-    global vdb
+    # global vdb
     with tempfile.TemporaryDirectory() as tmpdirname:
         for file in files:
             file_path = os.path.join(tmpdirname, file.filename)
