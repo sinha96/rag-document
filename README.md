@@ -91,7 +91,8 @@ curl http://localhost:11434/api/chat -d '{
 ```
 
 ## Future Updates
+- [X] Chat UI
 - [ ] Compatibility for docx, txt, web url
 - [ ] Multi-model agent which redirect requests based on user query
 - [ ] Compatibility for images
-- [ ] Chat UI
+
