@@ -85,8 +85,9 @@ class VectorData:
             self.__update_docs(docs=existing_docs)
 
     def _clear_database(self):
-        if os.path.exists(self.config_vdb.get('path')):
-            shutil.rmtree(self.config_vdb.get('path'))
+        existing_items = self.db.get(include=[]) 
+        existing_ids = set(existing_items["ids"])
+        self.db.delete(ids=existing_ids)
 
     def __update_docs(self, docs: List[Document]):
         """
